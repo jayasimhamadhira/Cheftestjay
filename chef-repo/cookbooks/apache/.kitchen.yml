@@ -1,0 +1,35 @@
+---
+driver:
+  name: azurerm
+
+driver_config:
+  subscription_id: 'a96afe92-ffe4-428b-8aab-60fe25ad6e11'
+  location: 'Central US'
+  machine_size: 'Standard_D1'
+
+transport:
+  ssh_key: ~/.ssh/id_kitchen-azurerm
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: ubuntu-14.04
+    driver_config:
+      image_urn: Canonical:UbuntuServer:14.04.4-LTS:latest
+      vm_name: trusty-vm
+      vm_tags:
+        ostype: linux
+        distro: ubuntu
+suites:
+  - name: default
+    run_list:
+      - recipe[apache::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+
